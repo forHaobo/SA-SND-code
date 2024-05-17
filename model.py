@@ -71,7 +71,7 @@ class self_gate(nn.Module):
         return embedding * gate
 
 class SymAgg(torch.nn.Module):
-    def __init__(self, hidden_channels, device):
+    def __init__(self, hidden_channels, args, device):
         super().__init__()
         self.syn_agg = Attention(hidden_channels, device=device)
         self.sym_agg = Attention(hidden_channels, device=device)
@@ -79,13 +79,12 @@ class SymAgg(torch.nn.Module):
         self.hidden_channels = hidden_channels
         self.attention = torch.nn.Parameter(torch.randn(1, self.hidden_channels))
         self.device = device
-        self.num_sym = 3
+        self.num_sym = args.numSym
         self.lins = torch.nn.ModuleList()
         for i in range(self.num_sym):
             self.lins.append(nn.Linear(self.hidden_channels, self.hidden_channels))
 
     def forward(self, dis_embed_sym, z_syn, dis_indexs, syn_indexs):  # z_src dis (N,64)
-        self.num_sym = len(dis_embed_sym)
         b_syn = torch.empty((0, 1, self.hidden_channels)).to(self.device)
         b_sym = torch.empty((0, self.num_sym, self.hidden_channels)).to(self.device)
         for dis_index, syn_index in zip(dis_indexs, syn_indexs):
@@ -126,7 +125,7 @@ class Model(torch.nn.Module):
         self.syn_tcm_encoder = LightGCN_ST(self.num_syn, self.num_tcm, args.emb_dim, data_args['syn_dim'], data_args['tcm_dim'], args.layer_num)
         self.num_sym = args.numSym
         self.embedding_dim = args.emb_dim
-        self.SymAgg = SymAgg(self.embedding_dim, device)
+        self.SymAgg = SymAgg(self.embedding_dim, args, device)
         self.syms = torch.nn.ModuleList()
         for i in range(self.num_sym):
             self.syms.append(self_gate(self.embedding_dim))
