@@ -21,9 +21,13 @@ SA-SDN: Symptom Disentanglement Network for Syndrome-Aware Herb Recommendation
 
 - Parameter setting(```parser.py```)
 
+## data
+
+You can find the data for testing at the following link: Dataset_XHAd.
+https://github.com/forHaobo/Dataset_XHAd
+
 ## Example to run the codes
 
 ```
 python train.py --batch_size 50 --numSym 4 --st 0.2
 ```
-
