@@ -24,7 +24,6 @@ SA-SDN: Symptom Disentanglement Network for Syndrome-Aware Herb Recommendation
 ## data
 
 You can find the data for testing at the following link: Dataset_XHAd.
-https://github.com/forHaobo/Dataset_XHAd
 
 ## Example to run the codes
 
